@@ -31,6 +31,7 @@
     "test:server": "vitest --project=\"server*\"",
     "test:exports": "vitest --project=exports",
     "test:browser": "vitest --project=\"browser*\"",
+    "test:other-browser": "vitest --project=\"browser (firefox)\" --project=\"browser (webkit)\"",
     "test:firefox": "vitest --project=\"browser (firefox)\"",
     "test:chromium": "vitest --project=\"browser (chromium)\"",
     "test:unit": "vitest --project unit",
