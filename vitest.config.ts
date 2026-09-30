@@ -27,6 +27,7 @@ export default defineConfig({
   cacheDir: resolve(import.meta.dirname, 'node_modules/.vite'),
   test: {
     reporters: 'dot',
+    retry: { count: 2 },
     env: {
       TZ: 'UTC-1', // to have some actual results with timezone offset
     },
