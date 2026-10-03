@@ -1,0 +1,49 @@
+name: "ghav human: CI"
+"on":
+  push:
+    branches:
+      - ghav/dev/5509
+    paths:
+      - .ghav/human
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node:
+          - 20.x
+          - lts/*
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+        with:
+          persist-credentials: false
+      - name: Install pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271
+      - name: Set node version to ${{ matrix.node }}
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - name: Setup
+        run: npm i -g @antfu/ni
+      - name: Install
+        run: nci
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+      - name: Build
+        run: nr build
+      - name: Typecheck
+        run: nr typecheck
+      - name: all tests with coverage
+        run: pnpm run test:cov
+      - name: other browser tests
+        run: pnpm run test:other-browser
+      - name: exports tests
+        run: pnpm run test:exports
+      - if: matrix.node == 'lts/*'
+        name: Playground Smoke Test
+        run: cd playgrounds && bash ./build.sh
