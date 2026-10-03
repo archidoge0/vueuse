@@ -5,10 +5,7 @@ permissions:
   contents: write
 
 on:
-  push:
-    tags:
-      - v*
-
+  workflow_dispatch:
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
